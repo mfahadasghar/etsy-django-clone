@@ -42,7 +42,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('landing')
 
 def landing_view(request):
     if request.user.is_authenticated and request.user.is_seller:
@@ -55,7 +55,7 @@ def landing_view(request):
     return render(request, 'landing.html', {
         'random_products': random_products,
         'new_products': new_products,
-        'popular_products': popular_products
+        'popular_products': popular_products,
     })
         
 @login_required

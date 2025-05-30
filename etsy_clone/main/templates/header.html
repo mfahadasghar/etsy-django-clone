@@ -54,8 +54,8 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'inbox' %}" title="Messages"><i class="bi bi-chat-dots"></i></a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" title="Logout"><i class="bi bi-box-arrow-right"></i></a></li>
           {% else %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}" title="Login"><i class="bi bi-box-arrow-in-right"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}" title="Sign Up"><i class="bi bi-person-plus"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal" title="Login"><i class="bi bi-box-arrow-in-right"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal" title="Register"><i class="bi bi-person-plus"></i></a></li>
           {% endif %}
         </ul>
       </div>

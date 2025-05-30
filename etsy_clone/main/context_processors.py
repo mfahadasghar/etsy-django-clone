@@ -1,4 +1,5 @@
 from .models import CartItem, WishlistItem,Category
+from .forms import LoginForm, RegisterForm
 
 def cart_and_wishlist_counts(request):
     if request.user.is_authenticated and request.user.is_buyer:
@@ -16,4 +17,10 @@ def cart_and_wishlist_counts(request):
 def categories_context(request):
     return {
         'categories': Category.objects.all()
+    }
+    
+def auth_forms(request):
+    return {
+        'login_form': LoginForm(),
+        'register_form': RegisterForm()
     }
