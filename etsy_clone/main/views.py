@@ -24,7 +24,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # auto login after registration
-            return redirect('home')
+            return redirect('landing')
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
@@ -35,7 +35,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home')
+            return redirect('landing')
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
@@ -46,36 +46,17 @@ def logout_view(request):
 
 def landing_view(request):
     if request.user.is_authenticated and request.user.is_seller:
-        return redirect('home')
+        return redirect('seller_dashboard')
     
     popular_products = Product.objects.annotate(order_count=Count('orderitem')).order_by('-order_count')[:8]
     new_products = Product.objects.order_by('-created_at')[:8]  # latest 8 products
     products = list(Product.objects.all())
     random_products = random.sample(products, min(len(products), 8))
-    categories = Category.objects.all()
     return render(request, 'landing.html', {
         'random_products': random_products,
-        'categories': categories,
         'new_products': new_products,
         'popular_products': popular_products
     })
-
-@login_required
-def home_view(request):
-    if request.user.is_authenticated and request.user.is_seller:
-        return render(request, 'home.html')
-    if request.user.is_authenticated and request.user.is_buyer:
-        popular_products = Product.objects.annotate(order_count=Count('orderitem')).order_by('-order_count')[:8]
-        new_products = Product.objects.order_by('-created_at')[:8]  # latest 8 products
-        products = list(Product.objects.all())
-        random_products = random.sample(products, min(len(products), 8))
-        categories = Category.objects.all()
-        return render(request, 'landing.html', {
-            'random_products': random_products,
-            'categories': categories,
-            'new_products': new_products,
-            'popular_products': popular_products
-        })
         
 @login_required
 def my_shop_view(request):

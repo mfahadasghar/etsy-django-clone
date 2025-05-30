@@ -1,4 +1,4 @@
-from .models import CartItem, WishlistItem
+from .models import CartItem, WishlistItem,Category
 
 def cart_and_wishlist_counts(request):
     if request.user.is_authenticated and request.user.is_buyer:
@@ -11,4 +11,9 @@ def cart_and_wishlist_counts(request):
     return {
         'cart_count': cart_count,
         'wishlist_count': wishlist_count,
+    }
+    
+def categories_context(request):
+    return {
+        'categories': Category.objects.all()
     }
