@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Orders on Your Products{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Orders on Your Products</h2>
+
+  {% if order_items %}
+    <table class="table table-bordered align-middle">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Product</th>
+          <th>Buyer</th>
+          <th>Quantity</th>
+          <th>Status</th>
+          <th>Change Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order_items %}
+          <tr>
+            <td>{{ item.order.id }}</td>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.order.buyer.username }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.get_status_display }}</td>
+            <td>
+              <form method="post" action="{% url 'update_order_status' item.id %}">
+                {% csrf_token %}
+                <select name="status" class="form-select form-select-sm d-inline w-auto">
+                  {% for value, label in item.STATUS_CHOICES %}
+                    <option value="{{ value }}" {% if item.status == value %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>You have no orders yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

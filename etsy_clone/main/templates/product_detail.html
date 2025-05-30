@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row">
+    <div class="col-md-6">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+      {% else %}
+        <div class="bg-secondary text-white text-center py-5">No Image Available</div>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <h2 class="mb-3">{{ product.name }}</h2>
+      <h4 class="text-success mb-3">${{ product.price }}</h4>
+      <p>{{ product.description }}</p>
+      <p><strong>Stock:</strong> {{ product.stock }}</p>
+      <hr>
+      <p><strong>Sold by:</strong> <a href="{% url 'shop_detail' product.shop.id %}">{{ product.shop.name }}</a></p>
+
+   {% if user.is_authenticated and user.is_buyer %}
+  <div class="d-flex gap-3 mt-3">
+    <form method="post" action="{% url 'add_to_cart' product.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-success">Add to Cart</button>
+    </form>
+
+    <form method="post" action="{% url 'add_to_wishlist' product.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-danger">♥ Wishlist</button>
+    </form>
+  </div>
+    {% endif %}
+    </div>
+  </div>
+
+<hr>
+  <h5>Reviews</h5>
+
+<div id="reviewCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+  <div class="carousel-inner">
+    {% for review in product.reviews.all %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="card border-0 shadow-sm mx-auto" style="max-width: 600px;">
+          <div class="card-body">
+            <h5 class="card-title">{{ review.buyer.username }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              ⭐ {{ review.rating }} | {{ review.created_at|date:"M d, Y" }}
+            </h6>
+            <p class="card-text">{{ review.comment }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<hr>
+<div class="shop-details my-5 p-4 border rounded bg-light">
+  <h4>Shop: <a href="{% url 'shop_detail' product.shop.id %}">{{ product.shop.name }}</a></h4>
+  {% if product.shop.banner %}
+    <img src="{{ product.shop.banner.url }}" alt="{{ product.shop.name }}" class="img-fluid mb-3" style="max-height: 150px; object-fit: cover;">
+  {% endif %}
+  <p>{{ product.shop.description }}</p>
+  {% if user == product.shop.owner %}
+    <a href="{% url 'edit_shop' %}" class="btn btn-outline-primary btn-sm">Edit Shop</a>
+  {% endif %}
+  {% if user.is_authenticated and user != product.shop.owner %}
+  <a href="{% url 'chat_with_seller' product.shop.owner.id %}" class="btn btn-outline-secondary mt-2">💬 Message Seller</a>
+{% endif %}
+</div>
+
+<div class="shop-products mb-5">
+  <h5>More from this shop</h5>
+  <div class="row">
+    {% for other_product in shop_products %}
+      <div class="col-md-3 mb-3">
+        <div class="card h-100">
+          {% if other_product.image %}
+            <img src="{{ other_product.image.url }}" class="card-img-top" alt="{{ other_product.name }}">
+          {% endif %}
+          <div class="card-body">
+            <h6 class="card-title">
+              <a href="{% url 'product_detail' other_product.id %}" class="text-decoration-none text-dark">
+                {{ other_product.name }}
+              </a>
+            </h6>
+            <p class="fw-bold">${{ other_product.price }}</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No other products in this shop.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="related-products mb-5">
+  <h5>Related Products</h5>
+  <div class="row">
+    {% for related in related_products %}
+      <div class="col-md-3 mb-3">
+        <div class="card h-100">
+          {% if related.image %}
+            <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.name }}">
+          {% endif %}
+          <div class="card-body">
+            <h6 class="card-title">
+              <a href="{% url 'product_detail' related.id %}" class="text-decoration-none text-dark">
+                {{ related.name }}
+              </a>
+            </h6>
+            <p class="fw-bold">${{ related.price }}</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No related products found.</p>
+    {% endfor %}
+  </div>
+</div>
+
+</div>
+
+{% endblock %}

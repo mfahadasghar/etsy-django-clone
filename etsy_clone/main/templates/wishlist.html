@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Your Wishlist{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2>Your Wishlist</h2>
+  <ul class="list-group">
+  {% for item in items %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a>
+      <div>
+        <span class="me-3">${{ item.product.price }}</span>
+        <form method="post" action="{% url 'remove_from_wishlist' item.id %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+        </form>
+      </div>
+    </li>
+  {% empty %}
+    <p>You have no items in your wishlist.</p>
+  {% endfor %}
+</ul>
+</div>
+{% endblock %}

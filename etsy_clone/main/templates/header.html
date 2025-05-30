@@ -1,0 +1,51 @@
+<!-- Full-width Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm w-100">
+    <div class="d-flex justify-content-between align-items-center w-100 px-4 py-2">
+      <a class="navbar-brand fw-bold fs-4 text-orange" href="/">Etsy Clone</a>
+
+      {% if user.is_authenticated and user.is_buyer %}
+  <form class="d-flex mx-auto" action="{% url 'search_products' %}" method="get" style="width: 40%;">
+    <div class="input-group">
+      <input type="search" name="q" class="form-control rounded-start-pill" placeholder="Search products..." aria-label="Search">
+      <button class="btn btn-outline-success rounded-end-pill" type="submit">Search</button>
+    </div>
+  </form>
+{% endif %}
+
+
+      <div>
+        <ul class="navbar-nav d-flex flex-row gap-3">
+          {% if user.is_authenticated %}
+            {% if user.is_seller %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'seller_dashboard' %}">📈 Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'my_shop' %}">My Shop</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'seller_orders' %}">📦 My Orders</a>
+                </li>
+            {% endif %}
+            {% if user.is_buyer %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'landing' %}">Home</a></li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_cart' %}">
+                🛒 Cart ({{ cart_count }})
+                </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_wishlist' %}">
+                ❤️ Wishlist ({{ wishlist_count }})
+                </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_orders' %}">📦 My Orders</a>
+                </li>
+            {% endif %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'inbox' %}">💬 Messages</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>

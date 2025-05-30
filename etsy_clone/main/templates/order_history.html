@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}My Orders{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2>Order History</h2>
+  {% for order in orders %}
+    <div class="border rounded p-3 mb-4">
+      <h5>Order #{{ order.id }} | Placed on {{ order.created_at|date:"M d, Y" }}</h5>
+      <ul class="list-group mb-2">
+        {% for item in order.items.all %}
+          <li class="list-group-item d-flex justify-content-between">
+            {{ item.product.name }} (x{{ item.quantity }})
+            <span>${{ item.price|floatformat:2 }}</span>
+
+            {% if item.status == 'delivered' and not item.review %}
+                <a href="{% url 'leave_review' item.id %}" class="btn btn-sm btn-outline-primary">Leave Review</a>
+            {% elif item.review %}
+                <span class="badge bg-success">Reviewed</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+      <strong>Total:</strong> ${{ order.total_price }}
+    </div>
+  {% empty %}
+    <p>You haven’t placed any orders yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

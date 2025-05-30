@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2>Confirm Your Order</h2>
+  <ul class="list-group mb-3">
+    {% for item in cart_items %}
+      <li class="list-group-item d-flex justify-content-between">
+        {{ item.product.name }} (x{{ item.quantity }})
+        <span>${{ item.product.price|floatformat:2 }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+  <h4>Total: ${{ total|floatformat:2 }}</h4>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success mt-3">Pay Now</button>
+  </form>
+</div>
+{% endblock %}

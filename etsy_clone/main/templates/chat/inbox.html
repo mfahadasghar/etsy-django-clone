@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}My Messages{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2>Inbox</h2>
+  {% if threads %}
+    <ul class="list-group">
+      {% for thread in threads %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <a href="{% url 'view_thread' thread.id %}">
+            {% if user == thread.buyer %}
+              Chat with {{ thread.seller.username }}
+            {% else %}
+              Chat with {{ thread.buyer.username }}
+            {% endif %}
+          </a>
+          <small>{{ thread.created_at|date:"M d, Y H:i" }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No messages yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

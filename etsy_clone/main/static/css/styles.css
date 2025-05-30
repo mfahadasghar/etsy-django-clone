@@ -1,0 +1,99 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.hero-section {
+    height: 90vh;
+    background: url('/static/images/etsy-bg.jpg') no-repeat center center/cover;
+    position: relative;
+}
+
+.hero-section .overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-section .content {
+    z-index: 10;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.btn-etsy {
+    background-color: #f1641e;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-etsy:hover {
+    background-color: #d9510f;
+    color: white;
+}
+
+.categories {
+    background-color: #fff8f4;
+}
+
+.category-card {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    font-weight: 500;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+}
+
+.footer a:hover {
+    text-decoration: underline;
+    color: #f1641e !important;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.scrolling-wrapper {
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.scrolling-wrapper::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.scrolling-wrapper a.btn {
+    border-radius: 25px;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.scrolling-wrapper a.btn:hover {
+    background-color: #f1641e;
+    color: white;
+    border-color: #f1641e;
+}
+
+.navbar form input[type="search"] {
+    border-radius: 25px;
+}
+
+.navbar form button {
+    border-radius: 25px;
+}

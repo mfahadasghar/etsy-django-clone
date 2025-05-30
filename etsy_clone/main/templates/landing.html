@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to Etsy Clone{% endblock %}
+
+{% block content %}
+
+<section class="py-4">
+  <div class="container">
+    <h2 class="mb-4 text-center">Shop by Category</h2>
+
+    <div class="scrolling-wrapper d-flex overflow-auto pb-2 gap-3">
+      {% for category in categories %}
+        <a href="{% url 'category_products' category.slug %}"
+           class="btn btn-outline-dark flex-shrink-0 px-4 py-2 text-nowrap">
+          {{ category.name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="hero-section text-white text-center d-flex align-items-center justify-content-center">
+  <div class="overlay"></div>
+  <div class="content position-relative z-1">
+    <h1 class="display-3 fw-bold mb-3">Discover Unique & Creative Goods</h1>
+    <p class="lead mb-4">Your one-stop marketplace for handmade, vintage, and custom items.</p>
+    <a href="{% url 'home' %}" class="btn btn-lg btn-etsy">Explore Marketplace</a>
+  </div>
+</section>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4">Featured Products</h2>
+    <div class="row">
+      {% for product in random_products %}
+        <div class="col-md-3 mb-4">
+          <div class="card h-100">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+                  {{ product.name }}
+                </a>
+              </h5>
+              <p class="fw-bold mb-0">${{ product.price }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
