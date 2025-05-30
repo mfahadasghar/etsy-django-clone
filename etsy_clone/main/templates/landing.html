@@ -3,17 +3,36 @@
 
 {% block content %}
 
+<style>
+  .scrolling-wrapper {
+    display: flex;
+    animation: scroll-left 40s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .scrolling-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
 <section class="py-4">
   <div class="container">
-    <h2 class="mb-4 text-center">Shop by Category</h2>
-
-    <div class="scrolling-wrapper d-flex overflow-auto pb-2 gap-3">
-      {% for category in categories %}
-        <a href="{% url 'category_products' category.slug %}"
-           class="btn btn-outline-dark flex-shrink-0 px-4 py-2 text-nowrap">
-          {{ category.name }}
-        </a>
-      {% endfor %}
+    <h2 class="mb-4 text-center fw-bold">Shop by Category</h2>
+    <div class="overflow-hidden">
+      <div class="scrolling-wrapper gap-3">
+        {% for i in "12"|make_list %}
+          {% for category in categories %}
+            <a href="{% url 'category_products' category.slug %}"
+               class="btn btn-outline-dark flex-shrink-0 px-4 py-2 text-nowrap">
+              {{ category.name }}
+            </a>
+          {% endfor %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </section>
@@ -28,7 +47,7 @@
 
 <section class="py-5 bg-light">
   <div class="container">
-    <h2 class="text-center mb-4">Featured Products</h2>
+    <h2 class="text-center mb-4 fw-bold">Featured Products</h2>
     <div class="row">
       {% for product in random_products %}
         <div class="col-md-3 mb-4">
@@ -48,6 +67,91 @@
         </div>
       {% endfor %}
     </div>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold">🆕 New Arrivals</h2>
+    <div class="row">
+      {% if new_products %}
+        {% for product in new_products %}
+          <div class="col-md-3 mb-4">
+            <div class="card h-100">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+                    {{ product.name }}
+                  </a>
+                </h5>
+                <p class="fw-bold mb-0">${{ product.price }}</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center">No new products available.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold">🔥 Popular Products</h2>
+    <div class="row">
+      {% if popular_products %}
+        {% for product in popular_products %}
+          <div class="col-md-3 mb-4">
+            <div class="card h-100">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+                    {{ product.name }}
+                  </a>
+                </h5>
+                <p class="fw-bold mb-0">${{ product.price }}</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center">No popular products available.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-dark text-white text-center">
+  <div class="container">
+    <h2 class="mb-3 fw-bold">Subscribe to Our Newsletter</h2>
+    <p class="mb-4">Get the latest updates on new products and special offers.</p>
+    <form class="d-flex justify-content-center" method="post" action="#">
+      {% csrf_token %}
+      <div class="input-group w-50">
+        <input type="email" class="form-control rounded-start-pill" placeholder="Enter your email">
+        <button class="btn btn-etsy rounded-end-pill" type="submit">Subscribe</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="py-5 text-center">
+  <div class="container">
+    <h2 class="mb-3 fw-bold">What is Etsy?</h2>
+    <p class="lead">Etsy is a global marketplace for unique and creative goods — from handcrafted items to vintage treasures and custom pieces, all from independent sellers.</p>
+  </div>
+</section>
+
+<section class="py-3 bg-success text-white text-center">
+  <div class="container">
+    <h6 class="mb-1">🌱 100% Carbon-Free Products</h6>
   </div>
 </section>
 

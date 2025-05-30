@@ -48,12 +48,16 @@ def landing_view(request):
     if request.user.is_authenticated and request.user.is_seller:
         return redirect('home')
     
+    popular_products = Product.objects.annotate(order_count=Count('orderitem')).order_by('-order_count')[:8]
+    new_products = Product.objects.order_by('-created_at')[:8]  # latest 8 products
     products = list(Product.objects.all())
     random_products = random.sample(products, min(len(products), 8))
     categories = Category.objects.all()
     return render(request, 'landing.html', {
         'random_products': random_products,
-        'categories': categories
+        'categories': categories,
+        'new_products': new_products,
+        'popular_products': popular_products
     })
 
 @login_required
@@ -61,12 +65,16 @@ def home_view(request):
     if request.user.is_authenticated and request.user.is_seller:
         return render(request, 'home.html')
     if request.user.is_authenticated and request.user.is_buyer:
+        popular_products = Product.objects.annotate(order_count=Count('orderitem')).order_by('-order_count')[:8]
+        new_products = Product.objects.order_by('-created_at')[:8]  # latest 8 products
         products = list(Product.objects.all())
         random_products = random.sample(products, min(len(products), 8))
         categories = Category.objects.all()
         return render(request, 'landing.html', {
             'random_products': random_products,
-            'categories': categories
+            'categories': categories,
+            'new_products': new_products,
+            'popular_products': popular_products
         })
         
 @login_required
