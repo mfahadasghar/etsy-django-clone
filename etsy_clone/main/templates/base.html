@@ -1,10 +1,11 @@
 <!-- main/templates/base.html -->
- {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Etsy Clone{% endblock %}</title>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -24,7 +25,7 @@
 
   setInterval(autoScroll, 50);
 </script>
-<body class="d-flex flex-column min-vh-100"> <!-- 👈 This makes body flexbox -->
+<body class="d-flex flex-column min-vh-100"> <!--  This makes body flexbox -->
 
 {% include "header.html" %}
 
@@ -34,12 +35,78 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+ <!-- Stylish Login Modal -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  .modal-content {
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .modal-title {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #2f4f4f;
+  }
+
+  .btn-close {
+    font-size: 1.1rem;
+  }
+
+  .modal-body {
+    padding-top: 10px;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    transition: border 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #f1641e;
+    box-shadow: 0 0 0 0.15rem rgba(241, 100, 30, 0.25);
+  }
+
+  .btn-login-modal {
+    background-color: #f1641e;
+    border: none;
+    font-weight: 500;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 10px;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .btn-login-modal:hover {
+    background-color: #d65314;
+  }
+
+  .modal-footer {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+</style>
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4">
       <div class="modal-header">
-        <h5 class="modal-title">Login</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title"><i class="bi bi-box-arrow-in-right me-2"></i>Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
@@ -47,34 +114,158 @@
           {{ login_form.as_p }}
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success w-100">Login</button>
+          <button type="submit" class="btn btn-login-modal">Login</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+
+<!-- Stylish Register Modal Styles -->
+<style>
+  .modal-content {
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .modal-title {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: #333;
+  }
+
+  .form-label {
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #333;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    transition: border 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #f1641e;
+    box-shadow: 0 0 0 0.15rem rgba(241, 100, 30, 0.25);
+  }
+
+  .btn-register-modal {
+    background-color: #f1641e;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .btn-register-modal:hover {
+    background-color: #d65314;
+  }
+
+  .social-btn {
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .modal-footer .text-center {
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  .modal-body .form-check-label {
+    font-weight: 500;
+    margin-left: 5px;
+  }
+
+  .modal-body .text-muted {
+    font-size: 0.85rem;
+  }
+</style>
 
 <!-- Register Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4">
       <div class="modal-header">
-        <h5 class="modal-title" id="registerModalLabel">Create Your Account</h5>
+        <h5 class="modal-title" id="registerModalLabel"><i class="bi bi-person-plus me-2"></i>Create Your Account</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form method="post" action="{% url 'register' %}">
+      <form method="post" action="{% url 'register' %}" novalidate>
         {% csrf_token %}
         <div class="modal-body">
-          {{ register_form.as_p }}
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ register_form.username.id_for_label }}">Username *</label>
+            {{ register_form.username }}
+            {% if register_form.username.errors %}
+              <div class="text-danger small">{{ register_form.username.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ register_form.email.id_for_label }}">Email *</label>
+            {{ register_form.email }}
+            {% if register_form.email.errors %}
+              <div class="text-danger small">{{ register_form.email.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ register_form.password1.id_for_label }}">Password *</label>
+            {{ register_form.password1 }}
+            {% if register_form.password1.errors %}
+              <div class="text-danger small">{{ register_form.password1.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="{{ register_form.password2.id_for_label }}">Confirm Password *</label>
+            {{ register_form.password2 }}
+            {% if register_form.password2.errors %}
+              <div class="text-danger small">{{ register_form.password2.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="form-check form-check-inline">
+            {{ register_form.is_seller }}
+            <label class="form-check-label" for="{{ register_form.is_seller.id_for_label }}">I am a seller</label>
+          </div>
+          <div class="form-check form-check-inline">
+            {{ register_form.is_buyer }}
+            <label class="form-check-label" for="{{ register_form.is_buyer.id_for_label }}">I am a buyer</label>
+          </div>
+
+          <p class="text-muted mt-3">
+            By registering, you agree to our <a href="#">Terms of Use</a> & <a href="#">Privacy Policy</a>.
+          </p>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary w-100">Register</button>
+
+        <div class="modal-footer d-flex flex-column gap-2">
+          <button type="submit" class="btn btn-register-modal w-100">Register</button>
+          <div class="text-center">OR</div>
+          <button type="button" class="btn btn-outline-dark social-btn w-100">
+            <i class="bi bi-google me-2"></i> Continue with Google
+          </button>
+          <button type="button" class="btn btn-outline-primary social-btn w-100">
+            <i class="bi bi-facebook me-2"></i> Continue with Facebook
+          </button>
+          <button type="button" class="btn btn-outline-secondary social-btn w-100">
+            <i class="bi bi-apple me-2"></i> Continue with Apple
+          </button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
 
 </body>
 </html>

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .impacthead-section {
+        padding: 80px 0;
+        background-color:#CCE9FF;
+    }
+</style>
+
+<div class="impacthead-section">
+    <div class="container py-5">
+  <div class="row text-left">
+    <div class="col-md-6 ">
+        <div class="row align-items-right">
+        <h1 class="mb-12">Committing to a world of good</h1>
+        <p class="text-left">What does it mean to shop at Etsy? It means that with every one-of-a-kind, can’t-stop-talking-about-it, completely delightful item you buy, a wave of positive change begins. From the small businesses, to the people behind them, to the planet around us – each purchase creates an impact we can all be proud of. Learn more about our push for progress and join us in committing to a world of good.</p>  
+      </div>
+    </div>
+    <div class="col-md-6 mt-5">  
+        <img src="{% static 'images/impact7.gif' %}" class="img-fluid rounded mb-3" style="width: 100%; height: auto; object-fit: cover;">    
+   </div>
+  </div>
+</div>
+    
+</div>
+
+
+
+<div class="container py-5">
+  <div class="row text-left">
+    <div class="col-md-6 ">
+      <img src="{% static 'images/impact2.gif' %}" class="img-fluid rounded mb-3" style="width: 100%; height: auto; object-fit: cover;">  
+    </div>
+    <div class="col-md-6 mt-5">  
+      <div class="row align-items-right">
+        <h3 class="mb-12">We are working to achieve our Net Zero goals by 2040</h3>
+        <p class="text-left">The climate crisis is here. So is our commitment to a better future for our planet. That's why we have a net zero carbon emissions goal approved by a leading non-profit standard body (SBTi) and we report our progress annually in our Integrated Report. While we work towards our net zero goal, we are also taking immediate action to address our impact by supporting carbon offset projects.</p>  
+      </div>
+   </div>
+  </div>
+</div>
+
+
+<div class="container py-5">
+  <div class="row text-left">
+    <div class="col-md-6 ">
+        <div class="row align-items-right">
+        <h3 class="mb-12">Generating nearly $4 billion in income for small businesses</h3>
+        <p class="text-left">When you shop small, you help create a more vibrant economy. In 2022, purchases on Etsy generated $3.6 billion in income for small businesses. That means that every purchase you make helps someone earn an income while pursuing their passion.</p>  
+      </div>
+    </div>
+    <div class="col-md-6 mt-5">  
+        <img src="{% static 'images/impact3.gif' %}" class="img-fluid rounded mb-3" style="width: 100%; height: auto; object-fit: cover;">    
+   </div>
+  </div>
+</div>
+
+
+
+<div class="container py-5">
+  <div class="row text-left">
+    <div class="col-md-6 ">
+      <img src="{% static 'images/impact1.gif' %}" class="img-fluid rounded mb-3" style="width: 100%; height: auto; object-fit: cover;">  
+    </div>
+    <div class="col-md-6 mt-5">  
+      <div class="row align-items-right">
+        <h3 class="mb-12">We believe makers and creatives everywhere deserve a shot at economic independence </h3>
+        <p class="text-left">The Etsy Uplift Initiative is a series of programmes that opens doors and builds opportunities for creative entrepreneurs everywhere. In 2023, Etsy buyers like you elected to donate the change on their orders 4.2 million times, which go towards non-profit initiatives supporting small businesses and entrepreneurship.</p>  
+      </div>
+   </div>
+  </div>
+</div>
+
+
+<style>
+    .impact-section {
+        padding: 80px 0;
+        background-color: #004225;
+    }
+    .impact-section h2 {
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 50px;
+        text-align: center;
+    }
+    .impact-card {
+        padding: 20px;  
+    }
+    .impact-card img {
+        width: 10px;
+        height: 10px;
+        margin-bottom: 20px;
+    }
+    .impact-card h5 {
+        font-size:20px;
+        margin-bottom: 10px;
+        color: white;
+    }
+    .impact-card p {
+        font-size: 0.95rem;
+        color: #e0e0e0;
+    }
+    .impact-card a {
+        color: #d3f8e2;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="impact-section">
+    <div class="container">
+        <h2>We're more than a place to shop.<br>We're a community doing good.</h2>
+        <div class="row">
+            <div class="col-md-4 impact-card">
+                <img src="{% static 'images/impact4.jpg' %}" class="img-fluid rounded mb-3" style="width: 30%; height: auto; object-fit: cover;"> 
+                <h5>A more inclusive place to work</h5>
+                <p>Employees from underrepresented communities constituted 18.8% of US Etsy.com hires in 2023, and our overall US employee population of underrepresented communities has increased from 8.6% in 2018 to 15.4% in 2023.</p>
+            </div>
+            <div class="col-md-4 impact-card">
+                 <img src="{% static 'images/impact5.avif' %}" class="img-fluid rounded mb-3" style="width: 30%; height: auto; object-fit: cover;"> 
+                <h5>We exceeded our goal of doubling sellers’ economic impact by 2023</h5>
+                <p>In 2022, Etsy sellers contributed almost $13.5 billion to the US economy, a 137% increase from our baseline of $5.7 billion in 2018. <a href="#">Read more</a></p>
+            </div>
+            <div class="col-md-4 impact-card">
+                 <img src="{% static 'images/impact6.jpg' %}" class="img-fluid rounded mb-3" style="width: 30%; height: auto; object-fit: cover;"> 
+                <h5>You can shop over 100 million listings with circular attributes across Etsy’s house of brands</h5>
+                <p>Purchasing a vintage item or one with a sustainability attribute</a> helps lead to a more sustainable lifestyle. The good news? In 2023, sellers across Etsy.com, Reverb and Depop listed over 100 million to choose from.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

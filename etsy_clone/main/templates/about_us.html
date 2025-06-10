@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About Us{% endblock %}
+{% block content %}
+
+
+<div class="container py-5">
+
+  <div class="row text-center">
+    <div class="col-md-2">
+      <a href="{% url 'about_us' %}" class="text-decoration-none text-dark">
+        <h5>About</h5>
+      </a>
+    </div>
+
+
+     <div class="col-md-2">
+      <a href="{% url 'team_view' %}" class="text-decoration-none text-dark">
+        <h5>Team</h5>
+      </a>
+    </div>
+
+    <div class="col-md-2">
+      <a >
+        <h5>Careers</h5>
+      </a>
+    </div>
+
+
+     <div class="col-md-2">
+      <a >
+        <h5>Press</h5>
+      </a>
+    </div>
+    
+
+    <div class="col-md-2">
+      <a href="{% url 'impact_view' %}" class="text-decoration-none text-dark">
+        <h5>Impact</h5>
+      </a>
+    </div>
+
+
+     <div class="col-md-2">
+      <a >
+        <h5>Investors</h5>
+      </a>
+    </div>
+
+
+
+
+
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row text-left">
+    <div class="col-md-6 ">
+      <img src="{% static 'images/lm.gif' %}" class="img-fluid rounded mb-3" style="width: 100%; height: auto; object-fit: cover;">  
+    </div>
+    <div class="col-md-6 ">
+      <div class="row align-items-right">
+        <h1 class="mb-12"> Keep </h1>
+        <h1 class="mb-12"> Commerce </h1>
+        <h1 class="mb-12"> Human </h1>
+        <p class="text-left">Etsy is the global marketplace for unique and creative goods. It’s home to a universe of special, extraordinary items, from unique handcrafted pieces to vintage treasures.</p>
+        <p class="text-left">In a time of increasing automation, it’s our mission to keep human connection at the heart of commerce. That’s why we built a place where creativity lives and thrives because it’s powered by people. We help our community of sellers turn their ideas into successful businesses. Our platform connects them with millions of buyers looking for an alternative - something special with a human touch, for those moments in life that deserve imagination.</p> 
+        <p class="text-left">As a company, we strive to lead with our guiding principles and to help spread ideas of sustainability and responsibility whose impact can reach far beyond our own business.</p>
+      </div>
+   </div>
+</div>
+
+<style>
+
+  
+  .scrolling-section {
+    height: 800px; 
+    overflow-y: scroll;
+    background-color: #2C2C44;
+    padding: 0px;
+    margin-top: 50px;
+    border-radius: 0px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+     color: white;
+  }
+
+  .scrolling-section h3 {
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .scrolling-section p {
+    color:white;
+    line-height: 1.6;
+    text-align: left;
+  }
+</style>
+
+<div class="scrolling-section">
+  <div class="container py-5">
+    <div class="row text-left">     
+      <div class="col-md-6 ">
+        <div class="container py-5">
+             <h1>How Etsy Works</h1>
+             <p>Our global marketplace is a vibrant community of real people connecting over special goods. The platform empowers sellers to do what they love and helps buyers find what they love.</p>
+        </div>
+        <div class="container py-5">
+             <h1>Sell extraordinarily</h1>
+             <p>With low fees, powerful tools, and support and education, we help creative entrepreneurs start, manage, and scale their businesses. Want to become an Etsy seller? All it takes is $0.20 to get started.</p>
+        </div>
+        <div class="container py-5">
+             <h1>Buy extraordinary</h1>
+             <p>From the specific to the unexpected (or custom-made), our search tools help buyers explore all the special one-of-a-kind items offered by Etsy sellers. Our Journal and Editors Picks curate exciting trends and ideas discovered in the marketplace by our own team.</p>
+        </div>
+        <div class="container py-5">
+             <h1>Shop Securely</h1>
+             <p>We provide the technology behind the Etsy marketplace, helping buyers and sellers connect and exchange on Etsy. Keeping those connections safe, fun and secure is our priority, and we’re always here to help.</p>
+        </div> 
+      </div>
+      <div class="col-md-6 ">
+      <div class="row text-left">
+        <img src="{% static 'images/about2.gif' %}" class="img-fluid rounded mb-3" alt="Etsy Hero Image" style="width: 100%; height: auto; object-fit: cover;">  
+      </div>
+    </div>
+      
+    </div>
+  </div>
+
+  <div class="container py-5">
+    
+ </div>
+</div>
+
+
+
+
+
+
+
+<div style="background-color: #D32F2F; color: white; padding: 60px 20px; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative;">
+  
+  <!-- Left arrow -->
+  <div style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 32px; cursor: pointer;">
+    &#10094;
+  </div>
+
+  <!-- Right arrow -->
+  <div style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 32px; cursor: pointer;">
+    &#10095;
+  </div>
+
+  <!-- Icon -->
+  <div style="margin-bottom: 20px;">
+    <img src="{% static 'images/aboutus3.gif' %}" class="img-fluid rounded mb-3" style="width: 10%; height: auto; object-fit: cover;"> 
+  </div>
+
+  <!-- Title -->
+  <h2 style="font-size: 32px; font-weight: normal; margin: 0 0 20px;">Where can I find news about Etsy?</h2>
+
+  <!-- Description -->
+  <p style="max-width: 700px; margin: 0 auto; font-size: 16px; line-height: 1.6;">
+    You’ll find product announcements, company news and stories about our community members at our 
+    <a href="#" style="color: #fff; text-decoration: underline;">news blog</a>. 
+    For investor news and presentations, SEC filings and leadership and governance information, visit our 
+    <a href="#" style="color: #fff; text-decoration: underline;">Investor Relations site</a>.
+  </p>
+
+  <!-- Dots -->
+  <div style="margin-top: 30px;">
+    <span style="height: 10px; width: 10px; margin: 0 5px; background-color: #fff; border-radius: 50%; display: inline-block;"></span>
+    <span style="height: 10px; width: 10px; margin: 0 5px; background-color: #fff; opacity: 0.5; border-radius: 50%; display: inline-block;"></span>
+    <span style="height: 10px; width: 10px; margin: 0 5px; background-color: #fff; opacity: 0.5; border-radius: 50%; display: inline-block;"></span>
+    <span style="height: 10px; width: 10px; margin: 0 5px; background-color: #fff; opacity: 0.5; border-radius: 50%; display: inline-block;"></span>
+  </div>
+
+</div>
+
+{% endblock %}
+
+  

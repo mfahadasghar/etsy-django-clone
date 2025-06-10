@@ -32,4 +32,36 @@ urlpatterns = [
     path('chat/<int:thread_id>/', view_thread, name='view_thread'),
     path('chat/', inbox, name='inbox'),
     path('seller/dashboard/', seller_dashboard, name='seller_dashboard'),
+    path('about-us/', about_us, name='about_us'),
+    path('about-us/team/', team_view, name='team_view'),
+    path('about-us/detail/', about_detail, name='about_detail'),
+    path('about-us/impact/', impact_view, name='impact_view'),
+    path('cart/increase/<int:item_id>/', views.increase_quantity, name='increase_quantity'),
+    path('cart/decrease/<int:item_id>/', views.decrease_quantity, name='decrease_quantity'),
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

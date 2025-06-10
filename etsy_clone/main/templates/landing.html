@@ -36,6 +36,7 @@
     </div>
   </div>
 </section>
+
 <section class="hero-section text-white text-center d-flex align-items-center justify-content-center">
   <div class="overlay"></div>
   <div class="content position-relative z-1">
@@ -47,13 +48,17 @@
 
 <section class="py-5 bg-light">
   <div class="container">
-    <h2 class="text-center mb-4 fw-bold">Featured Products</h2>
+    <h2 class="text-center mb-2 fw-bold">Featured Products</h2>
+    <p class="text-center text-muted mb-4">Showing {{ random_products|length }} products</p>
+
     <div class="row">
       {% for product in random_products %}
         <div class="col-md-3 mb-4">
-          <div class="card h-100">
+          <div class="card h-50">
             {% if product.image %}
-              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              <a href="{% url 'product_detail' product.id %}">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              </a>
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">
@@ -72,14 +77,17 @@
 
 <section class="py-5">
   <div class="container">
-    <h2 class="text-center mb-4 fw-bold">🆕 New Arrivals</h2>
+    <h2 class="text-center mb-2 fw-bold">Picks inspired by your shopping</h2>
+    <p class="text-center text-muted mb-4">Showing {{ random_products|length }} products</p>
     <div class="row">
-      {% if new_products %}
-        {% for product in new_products %}
+      {% if inspired_products %}
+        {% for product in inspired_products %}
           <div class="col-md-3 mb-4">
-            <div class="card h-100">
+            <div class="card h-50">
               {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <a href="{% url 'product_detail' product.id %}">
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                </a>
               {% endif %}
               <div class="card-body">
                 <h5 class="card-title">
@@ -101,14 +109,17 @@
 
 <section class="py-5 bg-light">
   <div class="container">
-    <h2 class="text-center mb-4 fw-bold">🔥 Popular Products</h2>
+    <h2 class="text-center mb-2 fw-bold"> Popular Products </h2>
+     <p class="text-center text-muted mb-4">Showing {{ random_products|length }} products</p>
     <div class="row">
       {% if popular_products %}
         {% for product in popular_products %}
           <div class="col-md-3 mb-4">
-            <div class="card h-100">
+            <div class="card h-50">
               {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <a href="{% url 'product_detail' product.id %}">
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                </a>
               {% endif %}
               <div class="card-body">
                 <h5 class="card-title">
@@ -142,16 +153,41 @@
   </div>
 </section>
 
-<section class="py-5 text-center">
+<section class="py-5" style="background-color: #fffde6;">
   <div class="container">
-    <h2 class="mb-3 fw-bold">What is Etsy?</h2>
-    <p class="lead">Etsy is a global marketplace for unique and creative goods — from handcrafted items to vintage treasures and custom pieces, all from independent sellers.</p>
-  </div>
-</section>
+    <h2 class="display-5 fw-semibold text-center mb-3">What is Etsy in Finland?</h2>
+    <p class="text-center mb-4">
+      <a href="{% url 'about_us' %}" class="text-decoration-underline text-muted">Read our wonderfully weird story</a>
+    </p>
 
-<section class="py-3 bg-success text-white text-center">
-  <div class="container">
-    <h6 class="mb-1">🌱 100% Carbon-Free Products</h6>
+    <div class="p-4 rounded shadow-sm mb-5 border-start border-4 border-primary">
+      <p class="fw-medium text-dark fs-5 mb-0">
+        Etsy is a global online marketplace where you can buy original handmade goods, vintage items, or craft supplies directly from local sellers right here in Finland and around the world. From cozy wool socks and other knitwear to brighten up the dark Nordic winters, to beautiful handmade jewelry and elevated homeware from beloved Finnish design brands: you can find it all on Etsy.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h5 class="text-primary fw-bold">How Etsy works?</h5>
+        <p class="text-muted">
+          When you shop on Etsy, you buy directly from sellers, including small local businesses and independent artists and crafters. The sellers are real people from around the world, offering a shopping experience with a human touch.
+        </p>
+      </div>
+
+      <div class="col-md-4">
+        <h5 class="text-primary fw-bold">Why choose Etsy?</h5>
+        <p class="text-muted">
+          Did you know that there’s a diverse community of talented artists, designers, and crafters right here in Finland? Etsy is known for quirky culture, quality craftsmanship, and creative design—so there’s no place like it for handmade goods.
+        </p>
+      </div>
+
+      <div class="col-md-4">
+        <h5 class="text-primary fw-bold">What can you buy on Etsy?</h5>
+        <p class="text-muted">
+          Unique handmade gifts, vintage finds, artwork, fashion, accessories, craft materials, home décor, and so much more. Every item tells a story.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 

@@ -12,6 +12,7 @@ def search_products(request):
     query = request.GET.get('q', '')
     products = Product.objects.filter(
         Q(name__icontains=query) | Q(description__icontains=query)
+    
     ) if query else []
     return render(request, 'search_results.html', {
         'query': query,
@@ -44,20 +45,49 @@ def logout_view(request):
     logout(request)
     return redirect('landing')
 
+from django.shortcuts import render, redirect
+from main.models import Product, Shop
+from django.db.models import Count
+import random
+
+from django.shortcuts import render, redirect
+from .models import Shop, Product
+from django.db.models import Count
+import random
+
 def landing_view(request):
+    # Redirect seller to their dashboard
     if request.user.is_authenticated and request.user.is_seller:
         return redirect('seller_dashboard')
-    
-    popular_products = Product.objects.annotate(order_count=Count('orderitem')).order_by('-order_count')[:8]
-    new_products = Product.objects.order_by('-created_at')[:8]  # latest 8 products
-    products = list(Product.objects.all())
-    random_products = random.sample(products, min(len(products), 8))
+
+    # Get the current user's shop (if any)
+    user_shop = None
+    if request.user.is_authenticated:
+        user_shop = Shop.objects.filter(owner=request.user).first()
+
+    # Exclude products from the user's own shop
+    if user_shop:
+        products = Product.objects.exclude(shop=user_shop)
+    else:
+        products = Product.objects.all()
+
+    # Fetch 16 popular products
+    popular_products = products.annotate(order_count=Count('order_items')).order_by('-order_count')[:16]
+
+    # Fetch 16 newest products (recently added)
+    inspired_products = products.order_by('-created_at')[:16]
+
+    # Fetch 16 random products
+    product_list = list(products)
+    random_products = random.sample(product_list, min(len(product_list), 16))
+
     return render(request, 'landing.html', {
         'random_products': random_products,
-        'new_products': new_products,
+        'inspired_products': inspired_products,  # ✅ valid context key
         'popular_products': popular_products,
     })
-        
+
+  
 @login_required
 def my_shop_view(request):
     try:
@@ -96,6 +126,23 @@ def shop_detail(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id)
     products = Product.objects.filter(shop=shop)
     return render(request, 'shop_detail.html', {'shop': shop, 'products': products})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @login_required
 def add_product(request):
@@ -172,7 +219,15 @@ def add_to_cart(request, product_id):
         if not created:
             cart_item.quantity += 1
             cart_item.save()
-    return redirect(request.META.get('HTTP_REFERER', 'home'))
+    return redirect('view_cart')
+
+
+
+
+
+   
+
+
 
 
 @login_required
@@ -180,7 +235,9 @@ def add_to_wishlist(request, product_id):
     if request.user.is_buyer:
         product = get_object_or_404(Product, id=product_id)
         WishlistItem.objects.get_or_create(user=request.user, product=product)
-    return redirect(request.META.get('HTTP_REFERER', 'home'))
+        
+    return redirect('view_wishlist')
+
 
 @login_required
 def view_wishlist(request):
@@ -228,6 +285,7 @@ def checkout(request):
                 price=item.product.price
             )
             # Optionally reduce stock
+            item.product.stock >= item.quantity
             item.product.stock -= item.quantity
             item.product.save()
 
@@ -252,6 +310,8 @@ def seller_orders(request):
 
     order_items = OrderItem.objects.filter(product__shop__owner=request.user).order_by('-order__created_at')
     return render(request, 'seller_orders.html', {'order_items': order_items})
+
+
 
 @require_POST
 @login_required
@@ -353,3 +413,70 @@ def seller_dashboard(request):
         'total_products_sold': total_products_sold,
         'order_items': order_items
     })
+    
+    
+    
+def about_us(request):
+    return render(request, 'about_us.html')
+
+def team_view(request):
+    return render(request, 'team_view.html')
+
+def about_detail(request):
+    return render(request, 'about_detail.html')
+
+def impact_view(request):
+    return render(request, 'impact_view.html')
+
+
+
+
+
+
+
+
+def increase_quantity(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, user=request.user)
+    item.quantity += 1
+    item.save()
+    return redirect('cart')
+
+def decrease_quantity(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, user=request.user)
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+    else:
+        item.delete()
+    return redirect('cart')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

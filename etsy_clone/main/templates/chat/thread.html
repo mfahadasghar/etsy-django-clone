@@ -7,22 +7,100 @@
     {{ thread.buyer.username }}
   {% endif %}
 {% endblock %}
+
 {% block content %}
+<style>
+  .chat-box {
+    height: 350px;
+    overflow-y: auto;
+    background: #f1f3f5;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+  }
+
+  .chat-message {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    position: relative;
+    font-size: 0.95rem;
+    word-wrap: break-word;
+  }
+
+  .chat-message .timestamp {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 5px;
+  }
+
+  .chat-left {
+    background-color: #ffffff;
+    text-align: left;
+    align-self: flex-start;
+  }
+
+  .chat-right {
+    background-color: #dbeafe;
+    text-align: right;
+    align-self: flex-end;
+    margin-left: auto;
+  }
+
+  .send-button {
+    background: linear-gradient(135deg, #007bff, #339af0);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 500;
+    border-radius: 25px;
+    transition: background 0.3s;
+  }
+
+  .send-button:hover {
+    background: linear-gradient(135deg, #0056b3, #1c7ed6);
+  }
+
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  textarea {
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+    resize: none;
+    border: 1px solid #ced4da;
+  }
+</style>
+
 <div class="container py-4">
-  <h3 class="mb-3">Chat</h3>
-  <div class="border p-3 mb-3 rounded bg-light" style="height: 300px; overflow-y: auto;">
+  <h3 class="mb-4 text-center">💬 Chat with 
+    {% if user == thread.buyer %}
+      {{ thread.seller.username }}
+    {% else %}
+      {{ thread.buyer.username }}
+    {% endif %}
+  </h3>
+
+  <div class="chat-box d-flex flex-column">
     {% for msg in messages %}
-      <div class="mb-2">
-        <strong>{{ msg.sender.username }}</strong>: {{ msg.text }}
-        <div class="text-muted small">{{ msg.sent_at|date:"M d, Y H:i" }}</div>
+      <div class="chat-message {% if msg.sender == user %}chat-right{% else %}chat-left{% endif %}">
+        <div>{{ msg.text }}</div>
+        <div class="timestamp">{{ msg.sent_at|date:"M d, Y H:i" }}</div>
       </div>
+    {% empty %}
+      <div class="text-center text-muted">No messages yet. Start the conversation!</div>
     {% endfor %}
   </div>
 
   <form method="post">
     {% csrf_token %}
     {{ form.text }}
-    <button type="submit" class="btn btn-primary mt-2">Send</button>
+    <button type="submit" class="send-button mt-3">📨 Send</button>
   </form>
 </div>
 {% endblock %}

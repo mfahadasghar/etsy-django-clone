@@ -1,25 +1,74 @@
 {% extends 'base.html' %}
 {% block title %}My Messages{% endblock %}
+
 {% block content %}
-<div class="container py-4">
-  <h2>Inbox</h2>
+<style>
+  .inbox-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .inbox-header h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #343a40;
+  }
+  .inbox-header p {
+    font-size: 1.1rem;
+    color: #6c757d;
+  }
+  .message-box {
+    background: #f8f9fa;
+    border-left: 5px solid #0d6efd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+  }
+  .message-box:hover {
+    background: #e9ecef;
+  }
+  .message-box a {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0d6efd;
+    text-decoration: none;
+  }
+  .message-box small {
+    display: block;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+</style>
+
+<div class="container py-5">
+  <div class="inbox-header">
+    <h2>📥 Inbox</h2>
+    <p>Your message threads are listed below. Click to continue your conversation.</p>
+  </div>
+
   {% if threads %}
-    <ul class="list-group">
-      {% for thread in threads %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <a href="{% url 'view_thread' thread.id %}">
-            {% if user == thread.buyer %}
-              Chat with {{ thread.seller.username }}
-            {% else %}
-              Chat with {{ thread.buyer.username }}
-            {% endif %}
-          </a>
-          <small>{{ thread.created_at|date:"M d, Y H:i" }}</small>
-        </li>
-      {% endfor %}
-    </ul>
+    {% for thread in threads %}
+      <div class="message-box">
+        <a href="{% url 'view_thread' thread.id %}">
+          {% if user == thread.buyer %}
+            Chat with {{ thread.seller.username }}
+          {% else %}
+            Chat with {{ thread.buyer.username }}
+          {% endif %}
+        </a>
+        <small>
+          {% if user == thread.buyer %}
+            {{ thread.seller.email }}
+          {% else %}
+            {{ thread.buyer.email }}
+          {% endif %}
+        </small>
+        <small>🕒 {{ thread.created_at|date:"M d, Y H:i" }}</small>
+      </div>
+    {% endfor %}
   {% else %}
-    <p>No messages yet.</p>
+    <p class="text-center text-muted">You have no messages yet.</p>
   {% endif %}
 </div>
 {% endblock %}

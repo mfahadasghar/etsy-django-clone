@@ -3,45 +3,62 @@
 
 {% block content %}
 <div class="container py-4">
-  <h2 class="mb-4">Orders on Your Products</h2>
+  <h2 class="mb-3 text-center">📦 Orders on Your Products</h2>
 
   {% if order_items %}
-    <table class="table table-bordered align-middle">
-      <thead>
-        <tr>
-          <th>Order #</th>
-          <th>Product</th>
-          <th>Buyer</th>
-          <th>Quantity</th>
-          <th>Status</th>
-          <th>Change Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in order_items %}
-          <tr>
-            <td>{{ item.order.id }}</td>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.order.buyer.username }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.get_status_display }}</td>
-            <td>
-              <form method="post" action="{% url 'update_order_status' item.id %}">
-                {% csrf_token %}
-                <select name="status" class="form-select form-select-sm d-inline w-auto">
-                  {% for value, label in item.STATUS_CHOICES %}
-                    <option value="{{ value }}" {% if item.status == value %}selected{% endif %}>{{ label }}</option>
+    <div class="row g-4">
+      {% for status_code, status_label in order_items.0.STATUS_CHOICES %}
+        <div class="col-md-6"><!-- 2 columns in medium+ screens -->
+          <div class="border rounded p-3 shadow-sm h-100">
+            <h5 class="text-primary text-center">{{ status_label }} Orders</h5>
+            <hr>
+            {% with order_items|dictsort:"id" as sorted_items %}
+              {% regroup sorted_items by status as grouped_statuses %}
+              
+              {% for group in grouped_statuses %}
+                {% if group.grouper == status_code %}
+                  {% for item in group.list %}
+                    <div class="mb-3 border-bottom pb-2">
+                      <div class="row">
+                        <div class="col-6">
+                          <p class="mb-1"><strong>Order #:</strong> {{ item.order.id }}</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="mb-1"><strong>Product:</strong> {{ item.product.name }}</p>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <p class="mb-1"><strong>Buyer:</strong> {{ item.order.buyer.username }}</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="mb-1"><strong>Quantity:</strong> {{ item.quantity }}</p>
+                        </div>
+                      </div>
+                      <form method="post" action="{% url 'update_order_status' item.id %}">
+                        {% csrf_token %}
+                        <div class="d-flex align-items-center gap-2">
+                          <select name="status" class="form-select form-select-sm w-auto">
+                            {% for value, label in item.STATUS_CHOICES %}
+                              <option value="{{ value }}" {% if item.status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                          </select>
+                          <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
+                        </div>
+                      </form>
+                    </div>
                   {% endfor %}
-                </select>
-                <button type="submit" class="btn btn-sm btn-primary">Update</button>
-              </form>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+                {% endif %}
+              {% empty %}
+                <p>No orders in this status.</p>
+              {% endfor %}
+            {% endwith %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   {% else %}
-    <p>You have no orders yet.</p>
+    <p class="text-muted">You have no orders yet.</p>
   {% endif %}
 </div>
 {% endblock %}

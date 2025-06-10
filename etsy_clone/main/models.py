@@ -11,6 +11,7 @@ class Shop(models.Model):
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True)
+
     banner = models.ImageField(upload_to='shop_banners/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -34,6 +35,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product_images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    on_sale = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name
@@ -43,9 +45,10 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
-
+    PAYMENT_METHOD_CHOICE=()
     class Meta:
         unique_together = ('user', 'product')
+
         
 class WishlistItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -61,6 +64,12 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
+    
+    
+    
+    
+    
+    
     def __str__(self):
         return f"Order #{self.id} by {self.buyer.username}"
 
@@ -76,6 +85,10 @@ class OrderItem(models.Model):
         ('delivered', 'Delivered'),
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
+  
+    ...
+
     
     
 class Review(models.Model):
@@ -105,3 +118,53 @@ class Message(models.Model):
 
     def __str__(self):
         return f"From {self.sender.username} at {self.sent_at}"
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

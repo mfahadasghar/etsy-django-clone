@@ -2,6 +2,151 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
+<style>
+  .shop-summary {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .shop-summary h4 a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .shop-summary p {
+    color: #555;
+  }
+
+  .custom-btn {
+    border-radius: 30px;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .btn-cart {
+    background: linear-gradient(135deg, #28a745, #4CAF50);
+    color: white;
+    border: none;
+  }
+
+  .btn-cart:hover {
+    background: linear-gradient(135deg, #218838, #388e3c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  }
+
+  .btn-wishlist {
+    background: linear-gradient(135deg, #fff, #ffe6f0);
+    border: 1px solid #e83e8c;
+    color: #e83e8c;
+  }
+
+  .btn-wishlist:hover {
+    background: linear-gradient(135deg, #e83e8c, #ff80b3);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(232, 62, 140, 0.3);
+  }
+
+  .btn-message {
+    background-color: #6c63ff;
+    color: #fff;
+    border: none;
+  }
+
+  .btn-message:hover {
+    background-color: #5848e5;
+  }
+
+  .review-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    animation: slideReviews 0.5s ease-in-out;
+  }
+
+  .review-card {
+    background: linear-gradient(to right, #f0f4ff, #e7f3ff);
+    border: 1px solid #dee2e6;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+    transition: transform 0.3s;
+  }
+
+  .review-card:hover {
+    transform: scale(1.02);
+  }
+
+  .review-card .card-title {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .review-card .card-subtitle {
+    color: #888;
+    font-size: 0.9rem;
+  }
+
+  .star-rating {
+    color: #ffc107;
+    font-size: 1.2rem;
+  }
+
+  .star-empty {
+    color: #ddd;
+  }
+
+  .no-review-box {
+    padding: 30px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    border: 2px dashed #ccc;
+    text-align: center;
+    font-style: italic;
+    color: #888;
+  }
+
+  .shop-summary-flex {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .shop-summary-flex .left {
+    flex: 1;
+    text-align: center;
+  }
+
+  .shop-summary-flex .left img {
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+
+  .shop-summary-flex .right {
+    flex: 2;
+  }
+
+  .shop-summary-flex .shop-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+</style>
+
 <div class="container py-5">
   <div class="row">
     <div class="col-md-6">
@@ -11,124 +156,154 @@
         <div class="bg-secondary text-white text-center py-5">No Image Available</div>
       {% endif %}
     </div>
+
     <div class="col-md-6">
       <h2 class="mb-3">{{ product.name }}</h2>
       <h4 class="text-success mb-3">${{ product.price }}</h4>
       <p>{{ product.description }}</p>
       <p><strong>Stock:</strong> {{ product.stock }}</p>
-      <hr>
-      <p><strong>Sold by:</strong> <a href="{% url 'shop_detail' product.shop.id %}">{{ product.shop.name }}</a></p>
+      <p><strong>Previous Orders:</strong> {{ product.order_items.count }} times ordered</p>
 
-   {% if user.is_authenticated and user.is_buyer %}
-  <div class="d-flex gap-3 mt-3">
-    <form method="post" action="{% url 'add_to_cart' product.id %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-success">Add to Cart</button>
-    </form>
-
-    <form method="post" action="{% url 'add_to_wishlist' product.id %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-outline-danger">♥ Wishlist</button>
-    </form>
-  </div>
-    {% endif %}
+      {% if user.is_authenticated and user.is_buyer %}
+        <div class="d-flex gap-3 mt-3">
+          <form method="post" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button type="submit" class="custom-btn btn-cart">🛒 Add to Cart</button>
+          </form>
+          <form method="post" action="{% url 'add_to_wishlist' product.id %}">
+            {% csrf_token %}
+            <button type="submit" class="custom-btn btn-wishlist">♥ Wishlist</button>
+          </form>
+        </div>
+      {% endif %}
     </div>
   </div>
 
-<hr>
-  <h5>Reviews</h5>
-
-<div id="reviewCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-  <div class="carousel-inner">
-    {% for review in product.reviews.all %}
-      <div class="carousel-item {% if forloop.first %}active{% endif %}">
-        <div class="card border-0 shadow-sm mx-auto" style="max-width: 600px;">
-          <div class="card-body">
-            <h5 class="card-title">{{ review.buyer.username }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              ⭐ {{ review.rating }} | {{ review.created_at|date:"M d, Y" }}
-            </h6>
-            <p class="card-text">{{ review.comment }}</p>
-          </div>
+  <!-- Updated Shop Summary -->
+  <div class="shop-summary mt-5">
+    <div class="shop-summary-flex">
+      <div class="left">
+        <div class="shop-title">
+          <a href="{% url 'shop_detail' product.shop.id %}">🏪 {{ product.shop.name }}</a>
         </div>
+        {% if product.shop.banner %}
+          <img src="{{ product.shop.banner.url }}" alt="{{ product.shop.name }}">
+        {% endif %}
       </div>
-    {% endfor %}
+      <div class="right">
+        <p>{{ product.shop.description }}</p>
+      </div>
+    </div>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
 
-<hr>
-<div class="shop-details my-5 p-4 border rounded bg-light">
-  <h4>Shop: <a href="{% url 'shop_detail' product.shop.id %}">{{ product.shop.name }}</a></h4>
-  {% if product.shop.banner %}
-    <img src="{{ product.shop.banner.url }}" alt="{{ product.shop.name }}" class="img-fluid mb-3" style="max-height: 150px; object-fit: cover;">
+  <hr>
+  <h5 class="mb-3">🌟 Reviews</h5>
+
+  {% if product.reviews.exists %}
+    <div id="review-grid-container" class="review-grid">
+      {% for review in product.reviews.all %}
+        <div class="review-card">
+          <h5 class="card-title">{{ review.buyer.username }}</h5>
+          <h6 class="card-subtitle mb-2">
+            <span class="star-rating">
+              {% for i in "12345" %}
+                {% if forloop.counter <= review.rating %}
+                  ★
+                {% else %}
+                  <span class="star-empty">★</span>
+                {% endif %}
+              {% endfor %}
+            </span>
+            | {{ review.created_at|date:"M d, Y" }}
+          </h6>
+          <p class="card-text">{{ review.comment }}</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <script>
+      let container = document.getElementById('review-grid-container');
+      let reviews = container.children;
+      let current = 0;
+
+      function showNextReviews() {
+        for (let i = 0; i < reviews.length; i++) {
+          reviews[i].style.display = 'none';
+        }
+
+        let first = current;
+        let second = current + 1;
+
+        reviews[first % reviews.length].style.display = 'block';
+        if (reviews.length > 1) {
+          reviews[second % reviews.length].style.display = 'block';
+        }
+
+        current = (current + 2) % reviews.length;
+      }
+
+      showNextReviews();
+      setInterval(showNextReviews, 500);
+    </script>
+  {% else %}
+    <div class="no-review-box">🚫 No reviews yet for this product. Be the first to review!</div>
   {% endif %}
-  <p>{{ product.shop.description }}</p>
-  {% if user == product.shop.owner %}
-    <a href="{% url 'edit_shop' %}" class="btn btn-outline-primary btn-sm">Edit Shop</a>
-  {% endif %}
+
   {% if user.is_authenticated and user != product.shop.owner %}
-  <a href="{% url 'chat_with_seller' product.shop.owner.id %}" class="btn btn-outline-secondary mt-2">💬 Message Seller</a>
-{% endif %}
-</div>
+    <a href="{% url 'chat_with_seller' product.shop.owner.id %}" class="btn btn-message mt-4 custom-btn">💬 Message Seller</a>
+  {% endif %}
 
-<div class="shop-products mb-5">
-  <h5>More from this shop</h5>
-  <div class="row">
-    {% for other_product in shop_products %}
-      <div class="col-md-3 mb-3">
-        <div class="card h-100">
-          {% if other_product.image %}
-            <img src="{{ other_product.image.url }}" class="card-img-top" alt="{{ other_product.name }}">
-          {% endif %}
-          <div class="card-body">
-            <h6 class="card-title">
-              <a href="{% url 'product_detail' other_product.id %}" class="text-decoration-none text-dark">
-                {{ other_product.name }}
+  <hr>
+  <div class="shop-products mb-5">
+    <h5>More from this shop</h5>
+    <div class="row">
+      {% for other_product in shop_products %}
+        <div class="col-md-3 mb-3">
+          <div class="card h-50">
+            {% if other_product.image %}
+              <a href="{% url 'product_detail' other_product.id %}">
+                <img src="{{ other_product.image.url }}" class="card-img-top" alt="{{ other_product.name }}">
               </a>
-            </h6>
-            <p class="fw-bold">${{ other_product.price }}</p>
+            {% endif %}
+            <div class="card-body">
+              <h6 class="card-title">
+                <a href="{% url 'product_detail' other_product.id %}" class="text-decoration-none text-dark">
+                  {{ other_product.name }}
+                </a>
+              </h6>
+              <p class="fw-bold">${{ other_product.price }}</p>
+            </div>
           </div>
         </div>
-      </div>
-    {% empty %}
-      <p>No other products in this shop.</p>
-    {% endfor %}
+      {% empty %}
+        <p>No other products in this shop.</p>
+      {% endfor %}
+    </div>
   </div>
-</div>
 
-<div class="related-products mb-5">
-  <h5>Related Products</h5>
-  <div class="row">
-    {% for related in related_products %}
-      <div class="col-md-3 mb-3">
-        <div class="card h-100">
-          {% if related.image %}
-            <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.name }}">
-          {% endif %}
-          <div class="card-body">
-            <h6 class="card-title">
-              <a href="{% url 'product_detail' related.id %}" class="text-decoration-none text-dark">
-                {{ related.name }}
-              </a>
-            </h6>
-            <p class="fw-bold">${{ related.price }}</p>
+  <div class="related-products mb-5">
+    <h5>Related Products</h5>
+    <div class="row">
+      {% for related in related_products %}
+        <div class="col-md-3 mb-3">
+          <div class="card h-50">
+            {% if related.image %}
+              <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.name }}">
+            {% endif %}
+            <div class="card-body">
+              <h6 class="card-title">
+                <a href="{% url 'product_detail' related.id %}" class="text-decoration-none text-dark">
+                  {{ related.name }}
+                </a>
+              </h6>
+              <p class="fw-bold">${{ related.price }}</p>
+            </div>
           </div>
         </div>
-      </div>
-    {% empty %}
-      <p>No related products found.</p>
-    {% endfor %}
+      {% empty %}
+        <p>No related products found.</p>
+      {% endfor %}
+    </div>
   </div>
 </div>
-
-</div>
-
 {% endblock %}

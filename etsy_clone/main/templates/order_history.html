@@ -1,29 +1,106 @@
 {% extends 'base.html' %}
 {% block title %}My Orders{% endblock %}
-{% block content %}
-<div class="container py-4">
-  <h2>Order History</h2>
-  {% for order in orders %}
-    <div class="border rounded p-3 mb-4">
-      <h5>Order #{{ order.id }} | Placed on {{ order.created_at|date:"M d, Y" }}</h5>
-      <ul class="list-group mb-2">
-        {% for item in order.items.all %}
-          <li class="list-group-item d-flex justify-content-between">
-            {{ item.product.name }} (x{{ item.quantity }})
-            <span>${{ item.price|floatformat:2 }}</span>
 
-            {% if item.status == 'delivered' and not item.review %}
-                <a href="{% url 'leave_review' item.id %}" class="btn btn-sm btn-outline-primary">Leave Review</a>
-            {% elif item.review %}
-                <span class="badge bg-success">Reviewed</span>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-      <strong>Total:</strong> ${{ order.total_price }}
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center fw-bold mb-2" style="font-family: 'Segoe UI', sans-serif;">Your Orders</h2>
+  <p class="text-center fst-italic text-muted mb-4">"Track your shopping history and relive your favorite finds!"</p>
+
+  <style>
+    .order-card {
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .product-link {
+      text-decoration: none;
+      color: #000;
+    }
+
+    .product-link:hover {
+      text-decoration: underline;
+      color: #007bff;
+    }
+
+    .shop-info {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: #6c757d;
+    }
+
+    .shop-info a {
+      color: #6c757d;
+      text-decoration: none;
+    }
+
+    .shop-info a:hover {
+      text-decoration: underline;
+      color: #007bff;
+    }
+
+    .product-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+  </style>
+
+  {% if orders %}
+    {% for order in orders %}
+      <div class="card mb-4 shadow-sm order-card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <div>
+            <strong>Order #{{ order.id }}</strong><br>
+            <small class="text-muted">Placed on {{ order.created_at|date:"F d, Y" }}</small>
+          </div>
+          <div>
+            <span class="badge bg-secondary">Total: ${{ order.total_price }}</span>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for item in order.items.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                {% if item.product.image %}
+                  <a href="{% url 'product_detail' item.product.id %}">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="me-3 product-img">
+                  </a>
+                {% endif %}
+                <div>
+                  <a href="{% url 'product_detail' item.product.id %}" class="product-link">
+                    <strong>{{ item.product.name }}</strong>
+                  </a><br>
+                  <div class="shop-info">
+                    🏬 <strong>Shop:</strong>
+                    <a href="{% url 'shop_detail' item.product.shop.id %}">
+                      {{ item.product.shop.name }}
+                    </a><br>
+                    👤 <strong>Seller:</strong> {{ item.product.shop.owner.username }}
+                  </div>
+                  <small class="text-muted">Quantity: {{ item.quantity }}</small>
+                </div>
+              </div>
+              <div class="text-end">
+                <div>${{ item.price|floatformat:2 }}</div>
+                {% if item.status == 'delivered' and not item.review %}
+                  <a href="{% url 'leave_review' item.id %}" class="btn btn-sm btn-outline-primary mt-1">Leave Review</a>
+                {% elif item.review %}
+                  <span class="badge bg-success mt-1">Reviewed</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark mt-1">{{ item.status|title }}</span>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info text-center">
+      <h5>No Orders Yet</h5>
+      <p>Looks like you haven't placed any orders yet. Start exploring our <a href="{% url 'product_list' %}">products</a>!</p>
     </div>
-  {% empty %}
-    <p>You haven’t placed any orders yet.</p>
-  {% endfor %}
+  {% endif %}
 </div>
 {% endblock %}

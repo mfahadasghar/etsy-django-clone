@@ -1,63 +1,258 @@
 <!-- Full-width Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm w-100">
-    <div class="d-flex justify-content-between align-items-center w-100 px-4 py-2">
-      <a class="navbar-brand fw-bold fs-4 text-orange" href="/">Etsy Clone</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm w-100">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-      {% if not user.is_seller %}
-      <div class="d-flex mx-auto align-items-center" style="width: 40%;">
-        <div class="dropdown me-2">
-          <button class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px;">
-            <i class="bi bi-list fs-4"></i>
-          </button>
-          <ul class="dropdown-menu">
-            {% for category in categories %}
-              <li><a class="dropdown-item" href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-        <form class="flex-grow-1" action="{% url 'search_products' %}" method="get">
-          <div class="input-group">
-            <input type="search" name="q" class="form-control rounded-start-pill" placeholder="Search products..." aria-label="Search">
-            <button class="btn btn-outline-success rounded-end-pill" type="submit">Search</button>
-          </div>
-        </form>
-      </div>
-      {% endif %}
+    .text-orange {
+      color: #f1641e !important;
+    }
 
+    .text-orange:hover {
+      color: #d65314 !important;
+    }
 
-      <div>
-        <ul class="navbar-nav d-flex flex-row gap-3">
-          {% if user.is_authenticated %}
-            {% if user.is_seller %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'seller_dashboard' %}" title="Home"><i class="bi bi-house-door"></i></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'my_shop' %}" title="My Shop"><i class="bi bi-shop"></i></a></li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'seller_orders' %}" title="My Orders"><i class="bi bi-box-seam"></i></a>
-                </li>
-            {% endif %}
-            {% if user.is_buyer %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'landing' %}" title="Home"><i class="bi bi-house-door"></i></a></li>
-                <li class="nav-item">
-                <a class="nav-link" href="{% url 'view_cart' %}" title="Cart">
-                <i class="bi bi-cart"></i> ({{ cart_count }})
-                </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'view_wishlist' %}" title="Wishlist">
-                <i class="bi bi-heart"></i> ({{ wishlist_count }})
-                </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'view_orders' %}" title="My Orders"><i class="bi bi-box2-heart"></i></a>
-                </li>
-            {% endif %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'inbox' %}" title="Messages"><i class="bi bi-chat-dots"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" title="Logout"><i class="bi bi-box-arrow-right"></i></a></li>
-          {% else %}
-            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal" title="Login"><i class="bi bi-box-arrow-in-right"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal" title="Register"><i class="bi bi-person-plus"></i></a></li>
-          {% endif %}
+    .etsy-dropdown-btn {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .etsy-dropdown-btn:hover {
+      background-color: #f7f7f7;
+      border-color: #bbb;
+    }
+
+    .etsy-dropdown-icon {
+      margin-left: 6px;
+    }
+
+    .etsy-searchbar .form-control {
+      height: 42px;
+      font-size: 0.95rem;
+      padding-left: 15px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .etsy-searchbar .btn {
+      height: 42px;
+    }
+
+    .nav-link i {
+      font-size: 1.3rem;
+      transition: transform 0.2s;
+    }
+
+    .nav-link:hover i {
+      transform: scale(1.15);
+      color: #f1641e;
+    }
+
+    .etsy-tagline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-style: italic;
+      color: #888;
+      text-align: center;
+      margin-top: 6px;
+      margin-bottom: -10px;
+      letter-spacing: 0.3px;
+    }
+
+    .etsy-tagline::after {
+      content: '';
+      display: block;
+      width: 180px;
+      height: 2px;
+      background-color: #f1641e;
+      margin: 6px auto 0;
+      border-radius: 10px;
+    }
+
+    .account-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .account-box {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 40px;
+      background-color: #fff5f0;
+      min-width: 220px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      padding: 15px;
+      font-family: 'Poppins', sans-serif;
+      z-index: 999;
+    }
+
+    .account-box.show {
+      display: block;
+    }
+
+    .account-box p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .account-box hr {
+      margin: 8px 0;
+      border-color: #eee;
+    }
+
+    .account-box a {
+      color: #f1641e;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: inline-block;
+    }
+
+    .account-box a:hover {
+      color: #d65314;
+    }
+
+    .account-icon-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Scrollable Dropdown Customization */
+    .dropdown-menu {
+      max-height: 300px;
+      overflow-y: auto;
+      background-color: #f8f9fa; /* Light grey */
+      font-family: 'Poppins', sans-serif;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .dropdown-menu::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .dropdown-menu::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 10px;
+    }
+
+    .dropdown-item {
+      color: #333;
+      transition: background 0.2s;
+    }
+
+    .dropdown-item:hover {
+      background-color: #e9ecef;
+      color: #f1641e;
+    }
+  </style>
+
+  <div class="d-flex justify-content-between align-items-center w-100 px-4 py-2">
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold fs-4 text-orange" href="/">ETSY CLONE</a>
+
+    <!-- Search bar & categories for buyers -->
+    {% if not user.is_seller %}
+    <div class="d-flex mx-auto align-items-center" style="width: 55%;">
+      <div class="dropdown me-3">
+        <button class="etsy-dropdown-btn d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-list"></i>&nbsp;Categories
+          <i class="bi bi-chevron-down etsy-dropdown-icon"></i>
+        </button>
+        <ul class="dropdown-menu">
+          {% for category in categories %}
+            <li><a class="dropdown-item" href="{% url 'category_products' category.slug %}">{{ category.name }}</a></li>
+          {% endfor %}
         </ul>
       </div>
+      <form class="etsy-searchbar flex-grow-1" action="{% url 'search_products' %}" method="get">
+        <div class="input-group">
+          <input type="search" name="q" class="form-control rounded-start-pill" placeholder="Search products..." aria-label="Search">
+          <button class="btn btn-outline-success rounded-end-pill" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
     </div>
-  </nav>
+    {% endif %}
+
+    <!-- Navbar Icons -->
+    <div>
+      <ul class="navbar-nav d-flex flex-row gap-3 align-items-center">
+        {% if user.is_authenticated %}
+          {% if user.is_seller %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'seller_dashboard' %}" title="Dashboard"><i class="bi bi-speedometer2"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'my_shop' %}" title="My Shop"><i class="bi bi-shop-window"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'seller_orders' %}" title="Orders"><i class="bi bi-boxes"></i></a></li>
+          {% endif %}
+          {% if user.is_buyer %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'landing' %}" title="Home"><i class="bi bi-house-heart"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'view_cart' %}" title="Cart"><i class="bi bi-cart3"></i> ({{ cart_count }})</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'view_wishlist' %}" title="Wishlist"><i class="bi bi-heart-fill"></i> ({{ wishlist_count }})</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'view_orders' %}" title="Orders"><i class="bi bi-bag-check"></i></a></li>
+          {% endif %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'inbox' %}" title="Messages"><i class="bi bi-chat-left-text"></i></a></li>
+
+          <!-- 👤 Account Dropdown -->
+          <li class="nav-item account-dropdown">
+            <button class="nav-link account-icon-btn" id="accountBtn" title="My Account">
+              <i class="bi bi-person-circle"></i>
+            </button>
+            <div class="account-box" id="accountBox">
+              <p><strong>
+                {% if user.get_full_name %}
+                  {{ user.get_full_name }}
+                {% else %}
+                  {{ user.username }}
+                {% endif %}
+              </strong></p>
+              <p>{{ user.email }}</p>
+              <hr>
+              <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-1"></i>Logout</a>
+            </div>
+          </li>
+
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal" title="Login"><i class="bi bi-box-arrow-in-right"></i></a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal" title="Register"><i class="bi bi-person-plus-fill"></i></a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Tagline -->
+<div class="etsy-tagline">
+  Discover unique handmade & vintage treasures crafted by creative minds.
+</div>
+
+<!-- 👇 JavaScript for Account Dropdown -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const accountBtn = document.getElementById('accountBtn');
+    const accountBox = document.getElementById('accountBox');
+
+    accountBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      accountBox.classList.toggle('show');
+    });
+
+    // Close if clicked outside
+    document.addEventListener('click', function (e) {
+      if (!accountBtn.contains(e.target) && !accountBox.contains(e.target)) {
+        accountBox.classList.remove('show');
+      }
+    });
+  });
+</script>

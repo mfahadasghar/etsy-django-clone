@@ -2,14 +2,46 @@
 {% block title %}{{ category.name }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-  <h2 class="mb-4 text-center">Category: {{ category.name }}</h2>
+<style>
+  .category-heading {
+    font-family: Times New Roman, serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color:black;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .product-count {
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 10px;
+  }
+
+  .aesthetic-line {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 30px;
+  }
+</style>
+
+<div class="container py-4 text-center">
+  <h2 class="category-heading">Explore {{ category.name }}</h2>
+  <p class="product-count">Total {{ products|length }} product{{ products|length|pluralize }} </p>
+  <p class="aesthetic-line">Discover handpicked pieces that step up your style — because every detail matters! 👣</p>
+
   <div class="row">
     {% for product in products %}
-      <div class="col-md-4 mb-3">
-        <div class="card h-100">
+      <div class="col-md-3 mb-3">
+        <div class="card h-50">
           {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            <a href="{% url 'product_detail' product.id %}">
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            </a>
           {% endif %}
           <div class="card-body">
             <h5 class="card-title">

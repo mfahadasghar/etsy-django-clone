@@ -1,9 +1,31 @@
 {% extends 'base.html' %}
-{% block title %}Order Placed{% endblock %}
+{% block title %}Order Confirmed{% endblock %}
+
 {% block content %}
-<div class="container py-4 text-center">
-  <h2 class="text-success">Payment Successful!</h2>
-  <p>Your order #{{ order.id }} has been placed.</p>
-  <a href="{% url 'view_orders' %}" class="btn btn-outline-primary">View My Orders</a>
+<div class="container py-5" style="background-color: #fffefc;">
+  <div class="text-center mb-5">
+    <div class="mb-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Success" style="width: 80px; height: 80px;">
+    </div>
+    <h2 class="text-success fw-bold" style="font-family: 'Segoe UI', sans-serif;">Your Order Placed Successfully <br>Thank you for your purchase!</h2>
+    <p class="lead text-muted mb-3" style="font-style: italic;">We’ve received your order and are getting it ready for you.</p>
+    <h5 class="text-dark">Your Order Number: <span class="text-primary">#{{ order.id }}</span></h5>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="bg-light rounded p-4 shadow-sm mb-3">
+        <h5 class="mb-3 fw-semibold">What's next?</h5>
+        <ul class="list-unstyled text-start text-muted small">
+          <li class="mb-2">✔️ We'll notify you when the seller ships your item.</li>
+          <li class="mb-2">📦 You can track your order status from your account.</li>
+          <li class="mb-2">💌 Got questions? Reach out to the seller anytime.</li>
+        </ul>
+        
+      </div>
+
+      
+    </div>
+  </div>
 </div>
 {% endblock %}

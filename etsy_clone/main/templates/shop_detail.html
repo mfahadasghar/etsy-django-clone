@@ -2,47 +2,79 @@
 {% block title %}{{ shop.name }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<!-- Custom styles -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+  .shop-name {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.5rem;
+    color: #3b3b3b;
+  }
+
+  .shop-banner-small {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<div class="container py-4 text-center">
+
+  <!-- Small square banner -->
   {% if shop.banner %}
-    <img src="{{ shop.banner.url }}" alt="{{ shop.name }}" class="img-fluid mb-3">
+    <img src="{{ shop.banner.url }}" alt="{{ shop.name }}" class="shop-banner-small">
   {% endif %}
-  <h2>{{ shop.name }}</h2>
-  <p>{{ shop.description }}</p>
 
-{% if user == shop.owner %}
-  <div class="d-flex gap-3 mb-4">
-    <a href="{% url 'add_product' %}" class="btn btn-success">+ Add Product</a>
-    <a href="{% url 'edit_shop' %}" class="btn btn-outline-primary">Edit Shop</a>
-  </div>
-{% endif %}
+  <!-- Shop name -->
+  <h2 class="shop-name">{{ shop.name }}</h2>
 
-<h3 class="mt-4">Products</h3>
-<div class="row">
-  {% for product in products %}
-    <div class="col-md-4 mb-3">
-      <div class="card h-100">
-        {% if product.image %}
-          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-        {% endif %}
-        <div class="card-body">
+  <!-- Description -->
+  <p class="fst-italic">{{ shop.description }}</p>
+
+  <!-- Total number of products -->
+  <p class="fw-semibold text-muted">🛒 Total Products: {{ products|length }}</p>
+
+  {% if user == shop.owner %}
+    <div class="d-flex justify-content-center gap-3 mb-4">
+      <a href="{% url 'add_product' %}" class="btn btn-success">+ Add Product</a>
+      <a href="{% url 'edit_shop' %}" class="btn btn-outline-primary">Edit Shop</a>
+    </div>
+  {% endif %}
+
+  <!-- Product listing -->
+  <h3 class="mt-4">Products</h3>
+  <div class="row justify-content-center">
+    {% for product in products %}
+      <div class="col-md-3 mb-3">
+        <div class="card h-50">
+          {% if product.image %}
+            <a href="{% url 'product_detail' product.id %}">
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            </a>
+          {% endif %}
+          <div class="card-body text-center">
             <h5 class="card-title">
-                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+              <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
                 {{ product.name }}
-             </a>
-        </h5>
-        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
-          <p class="fw-bold">${{ product.price }}</p>
-          <span class="badge bg-secondary">Stock: {{ product.stock }}</span>
-          {% if user == shop.owner %}
-            <div class="mt-2 d-flex gap-2">
+              </a>
+            </h5>
+            <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+            <p class="fw-bold">${{ product.price }}</p>
+            <span class="badge bg-secondary">Stock: {{ product.stock }}</span>
+            {% if user == shop.owner %}
+              <div class="mt-2 d-flex justify-content-center gap-2">
                 <a href="{% url 'edit_product' product.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
                 <a href="{% url 'delete_product' product.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-            </div>
-        {% endif %}
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
-</div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
